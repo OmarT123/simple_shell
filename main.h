@@ -7,4 +7,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
+#define MAX_COMMAND_LENGTH 256
+
+int execute(char*, char*[]);
+
 #endif
