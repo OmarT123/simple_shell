@@ -13,10 +13,11 @@ int main(void)
 	ssize_t length;
 	int numArgs;
 	char *argsTokens;
+	int res;
 
 	while (1)
 	{
-		printf("#Shell$ ");
+		printf(" ($) ");
 		fflush(stdout);
 		length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 		if (length == -1)
@@ -30,7 +31,8 @@ int main(void)
 		}
 		else
 		{
-			command[length - 1] = '\0';
+			if (command[length - 1] == '\n')
+				command[length - 1] = '\0';
 			numArgs = 0;
 			argsTokens = strtok(command, " ");
 			while (argsTokens != NULL && numArgs < MAX_ARGS)
@@ -39,7 +41,11 @@ int main(void)
 				argsTokens = strtok(NULL, " ");
 			}
 			fullCommand[numArgs] = NULL;
-			execute(fullCommand);
+			if (numArgs == 0)
+				continue;
+			res = execute(fullCommand);
+			if (res == -2)
+				return (0);
 		}
 	}
 	return (0);
@@ -48,13 +54,17 @@ int main(void)
 /**
  * execute - takes a command and its arguments and executes it
  * @fullCommand: command and its arguments
- * Return: Always 0 (success)
+ * Return: 0 on success, -1 if no command passed, -2 if command is exit
  */
 
 int execute(char *fullCommand[])
 {
 	pid_t pid = fork();
 
+	if (fullCommand[0] == NULL)
+		return (-1);
+	if (strcmp(fullCommand[0], "exit") == 0)
+		return (-2);
 	if (pid == -1)
 	{
 		perror("fork");
