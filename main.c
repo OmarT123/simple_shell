@@ -11,9 +11,8 @@ int main(void)
 	char command[MAX_COMMAND_LENGTH];
 	char *fullCommand[MAX_ARGS];
 	ssize_t length;
-	int numArgs;
+	int numArgs, res;
 	char *argsTokens;
-	int res;
 
 	while (1)
 	{
