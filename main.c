@@ -16,7 +16,7 @@ int main(void)
 
 	while (1)
 	{
-		printf(" ($) ");
+		printf("#cisfun$ ");
 		fflush(stdout);
 		length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 		if (length == -1)
