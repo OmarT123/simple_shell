@@ -16,13 +16,12 @@ int main(void)
 
 	while (1)
 	{
-		printf("#cisfun$ ");
+		if (isatty(STDIN_FILENO))
+			printf("#cisfun$ ");
 		fflush(stdout);
 		length = read(STDIN_FILENO, command, MAX_COMMAND_LENGTH);
 		if (length == -1)
-		{
 			perror("read");
-		}
 		else if (length == 0)
 		{
 			printf("\n");
