@@ -75,7 +75,7 @@ int execute(char *fullCommand[])
 		 * execute the command,
 		 * if not found (i.e execve returns -1) then print error message
 		 */
-		if (execve(fullCommand[0], fullCommand, NULL) == -1)
+		if (execve(fullCommand[0], fullCommand, envp) == -1)
 		{
 			printf("./hsh: No such file or directory\n");
 			exit(1);
