@@ -14,5 +14,7 @@ extern char **environ;
 
 int _execve(char *[]);
 int buildargs(char *, char *[]);
+int check(ssize_t, int, char *);
+int getpath(char *[]);
 
 #endif

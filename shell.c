@@ -11,7 +11,7 @@ int main(void)
 	size_t bufsize = 0;
 	ssize_t size_read;
 	char *args[MAX_COMMAND_LENGTH];
-	int is_terminal = isatty(STDIN_FILENO);
+	int is_terminal = isatty(STDIN_FILENO), check_ret, found;
 
 	while (1)
 	{
@@ -20,27 +20,49 @@ int main(void)
 			printf("$ ");
 			fflush(stdout);
 		}
-
 		size_read = getline(&command, &bufsize, stdin);
-		if (size_read == -1 && is_terminal)
-		{
-			printf("\n");
+		check_ret = check(size_read, is_terminal, command);
+		if (check_ret == -1)
 			break;
-		}
-		if (command[size_read - 1] == '\n')
-			command[size_read - 1] = '\0';
-
-		if (strcmp(command, "exit") == 0)
-		{
-			free(command);
-			break;
-		}
-		if (strcmp(command, "") == 0)
+		else if (check_ret == 1)
 			continue;
 		buildargs(command, args);
-		_execve(args);
+		found = strchr(args[0], '/') != NULL ? 0 : getpath(args);
+		if (found == 0)
+			_execve(args);
 		if (!is_terminal)
 			break;
 	}
+	return (0);
+}
+
+/**
+ * check - checks some conditions to ensure the command given is correct
+ * @size_read: size of input command
+ * @is_terminal: indicates wether the program is running interactively
+ * in terminal or not
+ * @command: input command
+ * Return: (1) if the command should be skipped,
+ * (0) if the command is correct and should be executed
+ * (-1) if an exit is read or an error and the program should stop
+*/
+
+int check(ssize_t size_read, int is_terminal, char *command)
+{
+	if (size_read == -1 && is_terminal)
+	{
+		printf("\n");
+		return (-1);
+	}
+	if (command[size_read - 1] == '\n')
+		command[size_read - 1] = '\0';
+
+	if (strcmp(command, "exit") == 0)
+	{
+		free(command);
+		return (-1);
+	}
+	if (strcmp(command, "") == 0)
+		return (1);
 	return (0);
 }
