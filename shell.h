@@ -13,5 +13,6 @@
 extern char **environ;
 
 int _execve(char *[]);
+int buildargs(char *, char *[]);
 
 #endif

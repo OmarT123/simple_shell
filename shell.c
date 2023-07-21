@@ -10,7 +10,7 @@ int main(void)
 	char *command = NULL;
 	size_t bufsize = 0;
 	ssize_t size_read;
-	char *args[2];
+	char *args[MAX_COMMAND_LENGTH];
 	int is_terminal = isatty(STDIN_FILENO);
 
 	while (1)
@@ -37,8 +37,7 @@ int main(void)
 		}
 		if (strcmp(command, "") == 0)
 			continue;
-		args[0] = command;
-		args[1] = NULL;
+		buildargs(command, args);
 		_execve(args);
 		if (!is_terminal)
 			break;
