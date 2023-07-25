@@ -17,7 +17,7 @@ int main(void)
 	{
 		if (is_terminal)
 		{
-			printf("$ ");
+			_print_string("$ ");
 			fflush(stdout);
 		}
 		size_read = getline(&command, &bufsize, stdin);
@@ -53,7 +53,7 @@ int check(ssize_t size_read, int is_terminal, char *command)
 
 	if (size_read == -1 && is_terminal)
 	{
-		printf("\n");
+		_putchar('\n');
 		return (-1);
 	}
 	if (command[size_read - 1] == '\n')
@@ -67,7 +67,7 @@ int check(ssize_t size_read, int is_terminal, char *command)
 	{
 		while (*env)
 		{
-			printf("%s\n", *env);
+			_print_string(*env);
 			env++;
 		}
 		return (1);

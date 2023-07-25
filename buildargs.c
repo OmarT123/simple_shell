@@ -12,7 +12,9 @@ void tokenize(char *command, char *args[])
 
 	for (j = 0; j < len; j++)
 	{
-		if (command[j] == ' ' || command[j] == '\t' || command[j] == '\n')
+		if (command[j] == '#')
+			break;
+		else if (command[j] == ' ' || command[j] == '\t' || command[j] == '\n')
 		{
 			if (start != -1)
 			{

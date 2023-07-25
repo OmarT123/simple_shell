@@ -13,6 +13,8 @@
 
 extern char **environ;
 
+int _putchar(char);
+int _print_string(char *s);
 int _execve(char *[]);
 int buildargs(char *, char *[]);
 int check(ssize_t, int, char *);
