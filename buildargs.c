@@ -1,23 +1,36 @@
 #include "shell.h"
 
 /**
- * buildargs - builds the array args
- * @command: the input command with its args
- * @args: the array to be built
- * Return: Always 0
+ * tokenize - tokenizes the command into its name and arguments
+ * @command: input command
+ * @args: array of arguments
+ * @count: number of arguments
  */
 
-int buildargs(char *command, char *args[])
+void tokenize(char *command, char *args[], int *count)
 {
-	int i = 0;
-	char *token;
+	int i = 0, j, len = _strlen(command), start = -1;
 
-	token = strtok(command, " ");
-	while (token != NULL && i < MAX_COMMAND_LENGTH - 1)
+	for (j = 0; j < len; j++)
 	{
-		args[i++] = token;
-		token = strtok(NULL, " ");
+		if (command[j] == ' ' || command[j] == '\t' || command[j] == '\n')
+		{
+			if (start != -1)
+			{
+				command[j] = '\0';
+				args[i++] = &command[start];
+				start = -1;
+			}
+		}
+		else if (start == -1)
+			start = j;
+	}
+	if (start != -1)
+	{
+		command[len] = '\0';
+		args[i++] = &command[start];
 	}
 	args[i] = NULL;
-	return (0);
+	*count = i;
+
 }

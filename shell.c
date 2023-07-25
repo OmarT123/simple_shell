@@ -11,7 +11,7 @@ int main(void)
 	size_t bufsize = 0;
 	ssize_t size_read;
 	char *args[MAX_COMMAND_LENGTH];
-	int is_terminal = isatty(STDIN_FILENO), check_ret, found;
+	int is_terminal = isatty(STDIN_FILENO), check_ret, found, count = 0;
 
 	while (1)
 	{
@@ -26,8 +26,8 @@ int main(void)
 			break;
 		else if (check_ret == 1)
 			continue;
-		buildargs(command, args);
-		found = strchr(args[0], '/') != NULL ? 0 : getpath(args);
+		tokenize(command, args, &count);
+		found = _strchr(args[0], '/') != NULL ? 0 : getpath(args);
 		if (found == 0)
 			_execve(args);
 		if (!is_terminal)
@@ -49,6 +49,8 @@ int main(void)
 
 int check(ssize_t size_read, int is_terminal, char *command)
 {
+	char **env = environ;
+
 	if (size_read == -1 && is_terminal)
 	{
 		printf("\n");
@@ -56,13 +58,21 @@ int check(ssize_t size_read, int is_terminal, char *command)
 	}
 	if (command[size_read - 1] == '\n')
 		command[size_read - 1] = '\0';
-
-	if (strcmp(command, "exit") == 0)
+	if (_strcmp(command, "exit") == 0)
 	{
 		free(command);
 		return (-1);
 	}
-	if (strcmp(command, "") == 0)
+	if (_strcmp(command, "env") == 0)
+	{
+		while (*env)
+		{
+			printf("%s\n", *env);
+			env++;
+		}
+		return (1);
+	}
+	if (_strcmp(command, "") == 0)
 		return (1);
 	return (0);
 }

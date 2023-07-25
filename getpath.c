@@ -8,7 +8,7 @@
 
 int getpath(char *args[])
 {
-	char *path = getenv("PATH"), *tokenize = strdup(path);
+	char *path = getenv("PATH"), *tokenize = _strdup(path);
 	char *dir;
 	char command_path[MAX_COMMAND_LENGTH];
 	size_t path_length;
@@ -18,13 +18,12 @@ int getpath(char *args[])
 		dir = strtok(tokenize, ":");
 		while (dir != NULL)
 		{
-			path_length = strlen(dir) + strlen(args[0]) + 2;
-			memset(command_path, '\0', sizeof(command_path));
+			path_length = _strlen(dir) + _strlen(args[0]) + 2;
 			if (path_length <= MAX_COMMAND_LENGTH)
 			{
-				strcpy(command_path, dir);
-				strcat(command_path, "/");
-				strcat(command_path, args[0]);
+				_strcpy(command_path, dir);
+				_strcat(command_path, "/");
+				_strcat(command_path, args[0]);
 				if (access(command_path, X_OK) == 0)
 				{
 					args[0] = command_path;
