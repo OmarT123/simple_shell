@@ -4,10 +4,9 @@
  * tokenize - tokenizes the command into its name and arguments
  * @command: input command
  * @args: array of arguments
- * @count: number of arguments
  */
 
-void tokenize(char *command, char *args[], int *count)
+void tokenize(char *command, char *args[])
 {
 	int i = 0, j, len = _strlen(command), start = -1;
 
@@ -31,6 +30,4 @@ void tokenize(char *command, char *args[], int *count)
 		args[i++] = &command[start];
 	}
 	args[i] = NULL;
-	*count = i;
-
 }

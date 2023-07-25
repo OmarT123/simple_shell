@@ -11,7 +11,7 @@ int main(void)
 	size_t bufsize = 0;
 	ssize_t size_read;
 	char *args[MAX_COMMAND_LENGTH];
-	int is_terminal = isatty(STDIN_FILENO), check_ret, found, count = 0;
+	int is_terminal = isatty(STDIN_FILENO), check_ret, found;
 
 	while (1)
 	{
@@ -26,7 +26,7 @@ int main(void)
 			break;
 		else if (check_ret == 1)
 			continue;
-		tokenize(command, args, &count);
+		tokenize(command, args);
 		found = _strchr(args[0], '/') != NULL ? 0 : getpath(args);
 		if (found == 0)
 			_execve(args);
