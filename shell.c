@@ -17,7 +17,8 @@ int main(void)
 	{
 		if (is_terminal)
 		{
-			_print_string("$ ");
+			_putchar('$');
+			_putchar(' ');
 			fflush(stdout);
 		}
 		size_read = getline(&command, &bufsize, stdin);
