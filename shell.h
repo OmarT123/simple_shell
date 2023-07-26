@@ -28,6 +28,7 @@ char *_strchr(char *, char);
 void tokenize(char *, char *[]);
 int handle_exit(char *[]);
 int _atoi(char *);
+int is_empty(char *);
 
 #endif
 

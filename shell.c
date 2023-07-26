@@ -27,8 +27,13 @@ int main(void)
 			_putchar('\n');
 			break;
 		}
-		if (size_read == 1)
+		if (is_empty(command) == 1)
+		{
+			_print_string("./hsh: No such file or directory");
 			continue;
+		}
+		if (_strlen(command) == 1)
+				continue;
 		if (command[size_read - 1] == '\n')
 			command[size_read - 1] = '\0';
 		tokenize(command, args);
@@ -87,5 +92,27 @@ int handle_exit(char *args[])
 	int status = (args[1] == NULL) ? 0 : _atoi(args[1]);
 
 	exit(status);
+}
+
+/**
+ * is_empty - checks if input string is empty or not
+ * @s: input string
+ * Return: 1 if empty, 0 if not empty
+ */
+
+int is_empty(char *s)
+{
+	char *temp = s;
+
+	while (*temp)
+	{
+		if (*s != '\033')
+			return (0);
+		s++;
+		if (*s == '[' && (*(s + 1) == 'A' || *(s + 1) == 'B' || *(s + 1) == 'C' || *(s + 1) == 'D'))
+			return (1);
+		temp++;
+	}
+	return (0);
 }
 
