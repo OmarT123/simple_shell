@@ -5,15 +5,15 @@
  * Return: Always 0
  */
 
-int main(void)
+int main(int argc, char *argv[])
 {
-	char *command = NULL;
+	char *command = NULL, *t;
 	size_t bufsize = 0;
 	ssize_t size_read;
 	char *args[MAX_COMMAND_LENGTH];
-	int is_terminal = isatty(STDIN_FILENO), check_ret, found;
+	int is_terminal = isatty(STDIN_FILENO), check_ret, found, x = argc;
 
-	while (1)
+	while (1 && x == argc)
 	{
 		if (is_terminal)
 		{
@@ -29,7 +29,9 @@ int main(void)
 		}
 		if (is_empty(command) == 1)
 		{
-			_print_string("./hsh: No such file or directory");
+			t = argv[0];
+			_strcat(t, ": No such file or directory");
+			_print_string(t);
 			continue;
 		}
 		if (_strlen(command) == 1)
