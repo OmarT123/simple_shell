@@ -42,6 +42,7 @@ int main(void)
 /**
  * check - checks some conditions to ensure the command given is correct
  * @command: input command
+ * @args: array of argumens
  * Return: (1) if the command should be skipped,
  * (0) if the command is correct and should be executed
  * (-1) if an exit is read or an error and the program should stop
