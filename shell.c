@@ -22,7 +22,12 @@ int main(void)
 			fflush(stdout);
 		}
 		size_read = getline(&command, &bufsize, stdin);
-		if ((size_read == -1 || size_read == 1) && is_terminal)
+		if (size_read == -1 && is_terminal)
+		{
+			_putchar('\n');
+			break;
+		}
+		if (size_read == 1)
 			continue;
 		if (command[size_read - 1] == '\n')
 			command[size_read - 1] = '\0';
