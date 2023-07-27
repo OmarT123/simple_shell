@@ -1,38 +1,53 @@
 #include "shell.h"
 
 /**
- * getpath - gets the path of the command
- * @args: array of arguments
- * Return: (0) if found, (-1) if not found
+ * find_path - finds path of command
+ * @command: input command
+ * Return: path of command
  */
 
-int getpath(char *args[])
+char *find_path(char *command)
 {
-	char *path = getenv("PATH"), *tokenize = _strdup(path);
-	char *dir;
+	char copy[MAX_COMMAND_LENGTH];
+	char *directory, *path = _getenv("PATH");
 	char command_path[MAX_COMMAND_LENGTH];
-	size_t path_length;
 
-	if (path != NULL)
+	_strcpy(copy, path);
+	directory = strtok(copy, ":");
+	while (directory != NULL)
 	{
-		dir = strtok(tokenize, ":");
-		while (dir != NULL)
-		{
-			path_length = _strlen(dir) + _strlen(args[0]) + 2;
-			if (path_length <= MAX_COMMAND_LENGTH)
-			{
-				_strcpy(command_path, dir);
-				_strcat(command_path, "/");
-				_strcat(command_path, args[0]);
-				if (access(command_path, X_OK) == 0)
-				{
-					args[0] = command_path;
-					return (0);
-				}
-			}
-			dir = strtok(NULL, ":");
-		}
+		_strcpy(command_path, directory);
+		_strcat(command_path, "/");
+		_strcat(command_path, command);
+		if (access(command_path, F_OK) == 0)
+			return (_strdup(command_path));
+		directory = strtok(NULL, ":");
 	}
-	return (-1);
+	free(directory);
+	free(path);
+	return (NULL);
 }
 
+/**
+ * _getenv - gets the environment variable value
+ * @var: name of variable
+ * Return: value of environment variable, NULL if not found
+ */
+
+char *_getenv(char *var)
+{
+	char **env = environ;
+	char *variable;
+	size_t i;
+
+	for (; *env != NULL; ++env)
+	{
+		variable = *env;
+		for (i = 0; var[i] != '\0' && variable[i] == var[i]; ++i)
+		{
+		}
+		if (var[i] == '\0' && variable[i] == '=')
+			return (variable + i + 1);
+	}
+	return (NULL);
+}

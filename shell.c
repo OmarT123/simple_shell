@@ -2,16 +2,18 @@
 
 /**
  * main - Entry point, the base of the shell
+ * @argc: number of arguments
+ * @argv: array of arguments
  * Return: Always 0
  */
 
 int main(int argc, char *argv[])
 {
-	char *command = NULL, *t;
+	char *command = NULL, *found = NULL;
 	size_t bufsize = 0;
 	ssize_t size_read;
 	char *args[MAX_COMMAND_LENGTH];
-	int is_terminal = isatty(STDIN_FILENO), check_ret, found, x = argc;
+	int is_terminal = isatty(STDIN_FILENO), check_ret, x = argc;
 
 	while (1 && x == argc)
 	{
@@ -27,24 +29,20 @@ int main(int argc, char *argv[])
 			_putchar('\n');
 			break;
 		}
-		if (is_empty(command) == 1)
-		{
-			t = argv[0];
-			_strcat(t, ": No such file or directory");
-			_print_string(t);
+		if (is_empty(command, argv) == 1)
 			continue;
-		}
 		if (_strlen(command) == 1)
-				continue;
+			continue;
 		if (command[size_read - 1] == '\n')
 			command[size_read - 1] = '\0';
 		tokenize(command, args);
 		check_ret = check(args[0], args);
 		if (check_ret == 1)
 			continue;
-		found = _strchr(args[0], '/') != NULL ? 0 : getpath(args);
-		if (found == 0)
-			_execve(args);
+		found = (_strchr(args[0], '/') != NULL) ? NULL : find_path(args[0]);
+		if (found != NULL)
+			args[0] = found;
+		_execve(args);
 		if (!is_terminal)
 			break;
 	}
@@ -99,20 +97,28 @@ int handle_exit(char *args[])
 /**
  * is_empty - checks if input string is empty or not
  * @s: input string
+ * @argv: array of arguments
  * Return: 1 if empty, 0 if not empty
  */
 
-int is_empty(char *s)
+int is_empty(char *s, char *argv[])
 {
-	char *temp = s;
+	char *temp = s, *t;
+	int con = 0;
 
 	while (*temp)
 	{
 		if (*s != '\033')
 			return (0);
 		s++;
-		if (*s == '[' && (*(s + 1) == 'A' || *(s + 1) == 'B' || *(s + 1) == 'C' || *(s + 1) == 'D'))
+		con = *(s + 1) == 'A' || *(s + 1) == 'B' ? 1 : 0;
+		if (*s == '[' && (con || *(s + 1) == 'C' || *(s + 1) == 'D'))
+		{
+			t = argv[0];
+			_strcat(t, ": No such file or directory");
+			_print_string(t);
 			return (1);
+		}
 		temp++;
 	}
 	return (0);
