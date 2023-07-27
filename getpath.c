@@ -8,23 +8,28 @@
 
 char *find_path(char *command)
 {
-	char copy[MAX_COMMAND_LENGTH];
-	char *directory, *path = _getenv("PATH");
+	char *dir, *path = _getenv("PATH"), *tokenize = _strdup(path);
 	char command_path[MAX_COMMAND_LENGTH];
+	size_t len;
 
-	_strcpy(copy, path);
-	directory = strtok(copy, ":");
-	while (directory != NULL)
+	if (path != NULL)
 	{
-		_strcpy(command_path, directory);
-		_strcat(command_path, "/");
-		_strcat(command_path, command);
-		if (access(command_path, F_OK) == 0)
-			return (_strdup(command_path));
-		directory = strtok(NULL, ":");
+		dir = strtok(tokenize, ":");
+		while (dir != NULL)
+		{
+			len = _strlen(dir) + _strlen(command);
+
+			if (len <= MAX_COMMAND_LENGTH)
+			{
+				_strcpy(command_path, dir);
+				_strcat(command_path, "/");
+				_strcat(command_path, command);
+			}
+			if (access(command_path, X_OK) == 0)
+				return (_strdup(command_path));
+			dir = strtok(NULL, ":");
+		}
 	}
-	free(directory);
-	free(path);
 	return (NULL);
 }
 
