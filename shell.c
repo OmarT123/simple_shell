@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 		if (found != NULL)
 			args[0] = found;
 		_execve(args);
+		free(found);
 		if (!is_terminal)
 			break;
 	}

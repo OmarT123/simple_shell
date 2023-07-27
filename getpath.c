@@ -26,10 +26,14 @@ char *find_path(char *command)
 				_strcat(command_path, command);
 			}
 			if (access(command_path, X_OK) == 0)
+			{
+				free(tokenize);
 				return (_strdup(command_path));
+			}
 			dir = strtok(NULL, ":");
 		}
 	}
+	free(tokenize);
 	return (NULL);
 }
 
